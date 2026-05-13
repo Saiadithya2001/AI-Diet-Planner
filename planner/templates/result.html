@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Diet Report</title>
+
+    <style>
+
+        body{
+            background:#e8f5e9;
+            font-family:Arial;
+            padding:40px;
+        }
+
+        .result-box{
+            background:white;
+            width:500px;
+            margin:auto;
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0px 0px 15px gray;
+        }
+
+        h1{
+            color:#2e7d32;
+            text-align:center;
+        }
+
+        p{
+            font-size:18px;
+            line-height:1.8;
+        }
+
+        .highlight{
+            color:#1b5e20;
+            font-weight:bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="result-box">
+
+    <h1>Your Diet Report</h1>
+
+    <p><span class="highlight">Age:</span> {{ age }}</p>
+
+    <p><span class="highlight">Weight:</span> {{ weight }} kg</p>
+
+    <p><span class="highlight">Height:</span> {{ height }} cm</p>
+
+    <p><span class="highlight">Diet Preference:</span> {{ diet }}</p>
+
+    <p><span class="highlight">BMI:</span> {{ bmi }}</p>
+
+    <p><span class="highlight">Status:</span> {{ status }}</p>
+
+    <p><span class="highlight">Advice:</span> {{ advice }}</p>
+
+    <p><span class="highlight">Diet Plan:</span> {{ calories }}</p>
+
+</div>
+
+</body>
+</html>
