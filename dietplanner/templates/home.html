@@ -1,16 +1,20 @@
-<!DOCTYPE html>
-<html>
+<form method="POST">
+    {% csrf_token %}
 
-<head>
-    <title>AI Diet Planner</title>
-</head>
+    <input type="number" name="age" placeholder="Age" required>
 
-<body>
+    <input type="number" step="0.1" name="weight" placeholder="Weight" required>
 
-<h1>AI Diet Planner 🚀</h1>
+    <input type="number" step="0.1" name="height" placeholder="Height" required>
 
-<p>Django webpage is working successfully.</p>
+    <select name="diet">
 
-</body>
+        <option value="veg">Vegetarian</option>
 
-</html>
+        <option value="nonveg">Non Vegetarian</option>
+
+    </select>
+
+    <button type="submit">Generate Diet</button>
+
+</form>

@@ -12,8 +12,8 @@ FOOD_DB = {
     "chapati": {"calories": 110, "protein": 3, "fiber": 2.7},
 }
 
-
 def scale_food(food, protein_target):
+
     item = FOOD_DB[food]
 
     scale = protein_target / item["protein"] if item["protein"] != 0 else 1
@@ -27,7 +27,6 @@ def scale_food(food, protein_target):
         "protein": round(item["protein"] * scale, 2),
         "fiber": round(item["fiber"] * scale, 2),
     }
-
 
 def home(request):
 
@@ -46,12 +45,12 @@ def home(request):
         if bmi < 18.5:
             status = "Underweight"
             calorie_target = weight * 35
-            advice = "Increase calorie intake (bulk diet)."
+            advice = "Increase calorie intake."
 
         elif bmi > 25:
             status = "Overweight"
             calorie_target = weight * 25
-            advice = "Follow calorie deficit diet."
+            advice = "Follow calorie deficit."
 
         else:
             status = "Normal"
@@ -64,6 +63,7 @@ def home(request):
             breakfast_food = "oats"
             lunch_food = "dal"
             dinner_food = "paneer"
+
         else:
             breakfast_food = "egg"
             lunch_food = "chicken"
