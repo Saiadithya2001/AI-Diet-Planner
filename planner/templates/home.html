@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
     <title>AI Diet Planner</title>
@@ -8,41 +7,50 @@
     <style>
 
         body{
-            background:#f2f2f2;
             font-family:Arial;
-            padding:40px;
+            background:#f4f7fb;
+            margin:0;
+            padding:0;
         }
 
         .container{
+            width:90%;
+            max-width:500px;
+            margin:60px auto;
             background:white;
-            width:400px;
-            margin:auto;
             padding:30px;
             border-radius:15px;
-            box-shadow:0px 0px 10px gray;
+            box-shadow:0px 4px 15px rgba(0,0,0,0.1);
         }
 
         h1{
             text-align:center;
-            color:#4CAF50;
+            color:#0f62fe;
         }
 
         input, select{
             width:100%;
             padding:12px;
-            margin-top:10px;
-            margin-bottom:20px;
-            border-radius:8px;
+            margin-top:15px;
+            border-radius:10px;
+            border:1px solid #ccc;
+            font-size:16px;
         }
 
         button{
             width:100%;
-            padding:12px;
-            background:#4CAF50;
-            color:white;
+            padding:14px;
+            margin-top:20px;
             border:none;
+            background:#0f62fe;
+            color:white;
+            font-size:18px;
             border-radius:10px;
-            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0043ce;
         }
 
     </style>
@@ -51,35 +59,33 @@
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>AI Diet Planner</h1>
+        <h1>AI Diet Planner</h1>
 
-    <form method="POST">
+        <form method="POST">
 
-        {% csrf_token %}
+            {% csrf_token %}
 
-        <label>Age</label>
-        <input type="number" name="age" required>
+            <input type="number" name="age" placeholder="Enter Age" required>
 
-        <label>Weight (kg)</label>
-        <input type="number" step="0.1" name="weight" required>
+            <input type="number" step="0.1" name="weight" placeholder="Enter Weight (kg)" required>
 
-        <label>Height (cm)</label>
-        <input type="number" step="0.1" name="height" required>
+            <input type="number" step="0.1" name="height" placeholder="Enter Height (cm)" required>
 
-        <label>Diet Preference</label>
+            <select name="diet">
 
-        <select name="diet" required>
-            <option value="Veg">Veg</option>
-            <option value="Non-Veg">Non-Veg</option>
-        </select>
+                <option value="veg">Vegetarian</option>
 
-        <button type="submit">Generate Plan</button>
+                <option value="nonveg">Non Vegetarian</option>
 
-    </form>
+            </select>
 
-</div>
+            <button type="submit">Generate Diet Plan</button>
+
+        </form>
+
+    </div>
 
 </body>
 </html>

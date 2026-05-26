@@ -1,40 +1,43 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
-    <title>Diet Report</title>
+    <title>Diet Result</title>
 
     <style>
 
         body{
-            background:#e8f5e9;
             font-family:Arial;
-            padding:40px;
+            background:#f4f7fb;
+            margin:0;
+            padding:0;
         }
 
-        .result-box{
+        .container{
+            width:90%;
+            max-width:900px;
+            margin:40px auto;
+        }
+
+        .card{
             background:white;
-            width:500px;
-            margin:auto;
-            padding:30px;
-            border-radius:20px;
-            box-shadow:0px 0px 15px gray;
+            padding:25px;
+            border-radius:15px;
+            margin-bottom:25px;
+            box-shadow:0px 4px 15px rgba(0,0,0,0.1);
         }
 
         h1{
-            color:#2e7d32;
             text-align:center;
+            color:#0f62fe;
+        }
+
+        h2{
+            color:#0f62fe;
         }
 
         p{
-            font-size:18px;
-            line-height:1.8;
-        }
-
-        .highlight{
-            color:#1b5e20;
-            font-weight:bold;
+            font-size:17px;
         }
 
     </style>
@@ -43,27 +46,72 @@
 
 <body>
 
-<div class="result-box">
+    <div class="container">
 
-    <h1>Your Diet Report</h1>
+        <h1>Personalized Diet Plan</h1>
 
-    <p><span class="highlight">Age:</span> {{ age }}</p>
+        <div class="card">
 
-    <p><span class="highlight">Weight:</span> {{ weight }} kg</p>
+            <h2>User Details</h2>
 
-    <p><span class="highlight">Height:</span> {{ height }} cm</p>
+            <p>Age: {{ age }}</p>
+            <p>Weight: {{ weight }} kg</p>
+            <p>Height: {{ height }} cm</p>
+            <p>Diet Type: {{ diet }}</p>
 
-    <p><span class="highlight">Diet Preference:</span> {{ diet }}</p>
+        </div>
 
-    <p><span class="highlight">BMI:</span> {{ bmi }}</p>
+        <div class="card">
 
-    <p><span class="highlight">Status:</span> {{ status }}</p>
+            <h2>Health Information</h2>
 
-    <p><span class="highlight">Advice:</span> {{ advice }}</p>
+            <p>BMI: {{ bmi }}</p>
+            <p>Status: {{ status }}</p>
+            <p>Advice: {{ advice }}</p>
 
-    <p><span class="highlight">Diet Plan:</span> {{ calories }}</p>
+            <p>Calories Target: {{ calorie_target }}</p>
+            <p>Protein Target: {{ protein_target }} g</p>
+            <p>Fiber Target: {{ fiber_target }} g</p>
 
-</div>
+        </div>
+
+        <div class="card">
+
+            <h2>Breakfast</h2>
+
+            <p>Food: {{ breakfast.food }}</p>
+            <p>Quantity: {{ breakfast.grams }} g</p>
+            <p>Calories: {{ breakfast.calories }}</p>
+            <p>Protein: {{ breakfast.protein }} g</p>
+            <p>Fiber: {{ breakfast.fiber }} g</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Lunch</h2>
+
+            <p>Food: {{ lunch.food }}</p>
+            <p>Quantity: {{ lunch.grams }} g</p>
+            <p>Calories: {{ lunch.calories }}</p>
+            <p>Protein: {{ lunch.protein }} g</p>
+            <p>Fiber: {{ lunch.fiber }} g</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Dinner</h2>
+
+            <p>Food: {{ dinner.food }}</p>
+            <p>Quantity: {{ dinner.grams }} g</p>
+            <p>Calories: {{ dinner.calories }}</p>
+            <p>Protein: {{ dinner.protein }} g</p>
+            <p>Fiber: {{ dinner.fiber }} g</p>
+
+        </div>
+
+    </div>
 
 </body>
 </html>
