@@ -1,43 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-    <title>Diet Result</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Diet Planner Result</title>
 
     <style>
 
-        body{
-            font-family:Arial;
-            background:#f4f7fb;
+        *{
             margin:0;
             padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, sans-serif;
+            background:#f3f7ff;
+            padding:30px 15px;
+            color:#111827;
         }
 
         .container{
-            width:90%;
-            max-width:900px;
-            margin:40px auto;
+            max-width:1100px;
+            margin:auto;
+        }
+
+        .title{
+            text-align:center;
+            font-size:40px;
+            margin-bottom:30px;
+            color:#2563eb;
+        }
+
+        .summary{
+            background:#2563eb;
+            color:white;
+            padding:25px;
+            border-radius:20px;
+            margin-bottom:30px;
+            text-align:center;
+        }
+
+        .summary h2{
+            margin-bottom:15px;
         }
 
         .card{
             background:white;
             padding:25px;
-            border-radius:15px;
+            border-radius:18px;
             margin-bottom:25px;
-            box-shadow:0px 4px 15px rgba(0,0,0,0.1);
+            box-shadow:0px 5px 20px rgba(0,0,0,0.08);
         }
 
-        h1{
-            text-align:center;
-            color:#0f62fe;
+        .card h2{
+            color:#2563eb;
+            margin-bottom:20px;
         }
 
-        h2{
-            color:#0f62fe;
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:15px;
         }
 
-        p{
-            font-size:17px;
+        .box{
+            background:#f8fafc;
+            padding:15px;
+            border-radius:12px;
+            border-left:5px solid #2563eb;
+        }
+
+        .label{
+            font-weight:bold;
+            color:#2563eb;
+            margin-bottom:5px;
+        }
+
+        .meal-item{
+            background:#f8fafc;
+            padding:15px;
+            border-radius:12px;
+            margin-bottom:12px;
+        }
+
+        .meal-item p{
+            margin:6px 0;
+        }
+
+        .meal-total{
+            margin-top:20px;
+            background:#e0ecff;
+            padding:15px;
+            border-radius:12px;
+        }
+
+        .meal-total p{
+            margin:8px 0;
+            font-weight:bold;
+        }
+
+        @media(max-width:700px){
+
+            .title{
+                font-size:30px;
+            }
         }
 
     </style>
@@ -48,70 +119,172 @@
 
     <div class="container">
 
-        <h1>Personalized Diet Plan</h1>
+        <h1 class="title">AI Personalized Diet Plan</h1>
 
-        <div class="card">
+        <div class="summary">
 
-            <h2>User Details</h2>
+            <h2>Daily Nutrition Target</h2>
 
-            <p>Age: {{ age }}</p>
-            <p>Weight: {{ weight }} kg</p>
-            <p>Height: {{ height }} cm</p>
-            <p>Diet Type: {{ diet }}</p>
-
-        </div>
-
-        <div class="card">
-
-            <h2>Health Information</h2>
-
-            <p>BMI: {{ bmi }}</p>
-            <p>Status: {{ status }}</p>
-            <p>Advice: {{ advice }}</p>
-
-            <p>Calories Target: {{ calorie_target }}</p>
-            <p>Protein Target: {{ protein_target }} g</p>
-            <p>Fiber Target: {{ fiber_target }} g</p>
+            <p>
+                Calories: {{ calorie_target }}
+                |
+                Protein: {{ protein_target }} g
+                |
+                Fiber: {{ fiber_target }} g
+            </p>
 
         </div>
 
         <div class="card">
 
-            <h2>Breakfast</h2>
+            <h2>User Information</h2>
 
-            <p>Food: {{ breakfast.food }}</p>
-            <p>Quantity: {{ breakfast.grams }} g</p>
-            <p>Calories: {{ breakfast.calories }}</p>
-            <p>Protein: {{ breakfast.protein }} g</p>
-            <p>Fiber: {{ breakfast.fiber }} g</p>
+            <div class="grid">
+
+                <div class="box">
+                    <div class="label">Age</div>
+                    {{ age }}
+                </div>
+
+                <div class="box">
+                    <div class="label">Weight</div>
+                    {{ weight }} kg
+                </div>
+
+                <div class="box">
+                    <div class="label">Height</div>
+                    {{ height }} cm
+                </div>
+
+                <div class="box">
+                    <div class="label">Diet</div>
+                    {{ diet }}
+                </div>
+
+                <div class="box">
+                    <div class="label">BMI</div>
+                    {{ bmi }}
+                </div>
+
+                <div class="box">
+                    <div class="label">Status</div>
+                    {{ status }}
+                </div>
+
+            </div>
 
         </div>
 
+        <!-- BREAKFAST -->
+
         <div class="card">
 
-            <h2>Lunch</h2>
+            <h2>Breakfast (25% Calories)</h2>
 
-            <p>Food: {{ lunch.food }}</p>
-            <p>Quantity: {{ lunch.grams }} g</p>
-            <p>Calories: {{ lunch.calories }}</p>
-            <p>Protein: {{ lunch.protein }} g</p>
-            <p>Fiber: {{ lunch.fiber }} g</p>
+            {% for item in breakfast.items %}
+
+            <div class="meal-item">
+
+                <p><strong>Food:</strong> {{ item.food }}</p>
+
+                <p><strong>Quantity:</strong> {{ item.grams }} g</p>
+
+                <p><strong>Calories:</strong> {{ item.calories }}</p>
+
+                <p><strong>Protein:</strong> {{ item.protein }} g</p>
+
+                <p><strong>Fiber:</strong> {{ item.fiber }} g</p>
+
+            </div>
+
+            {% endfor %}
+
+            <div class="meal-total">
+
+                <p>Total Calories: {{ breakfast.total_calories }}</p>
+
+                <p>Total Protein: {{ breakfast.total_protein }} g</p>
+
+                <p>Total Fiber: {{ breakfast.total_fiber }} g</p>
+
+            </div>
 
         </div>
 
+        <!-- LUNCH -->
+
         <div class="card">
 
-            <h2>Dinner</h2>
+            <h2>Lunch (50% Calories)</h2>
 
-            <p>Food: {{ dinner.food }}</p>
-            <p>Quantity: {{ dinner.grams }} g</p>
-            <p>Calories: {{ dinner.calories }}</p>
-            <p>Protein: {{ dinner.protein }} g</p>
-            <p>Fiber: {{ dinner.fiber }} g</p>
+            {% for item in lunch.items %}
+
+            <div class="meal-item">
+
+                <p><strong>Food:</strong> {{ item.food }}</p>
+
+                <p><strong>Quantity:</strong> {{ item.grams }} g</p>
+
+                <p><strong>Calories:</strong> {{ item.calories }}</p>
+
+                <p><strong>Protein:</strong> {{ item.protein }} g</p>
+
+                <p><strong>Fiber:</strong> {{ item.fiber }} g</p>
+
+            </div>
+
+            {% endfor %}
+
+            <div class="meal-total">
+
+                <p>Total Calories: {{ lunch.total_calories }}</p>
+
+                <p>Total Protein: {{ lunch.total_protein }} g</p>
+
+                <p>Total Fiber: {{ lunch.total_fiber }} g</p>
+
+            </div>
+
+        </div>
+
+        <!-- DINNER -->
+
+        <div class="card">
+
+            <h2>Dinner (25% Calories)</h2>
+
+            {% for item in dinner.items %}
+
+            <div class="meal-item">
+
+                <p><strong>Food:</strong> {{ item.food }}</p>
+
+                <p><strong>Quantity:</strong> {{ item.grams }} g</p>
+
+                <p><strong>Calories:</strong> {{ item.calories }}</p>
+
+                <p><strong>Protein:</strong> {{ item.protein }} g</p>
+
+                <p><strong>Fiber:</strong> {{ item.fiber }} g</p>
+
+            </div>
+
+            {% endfor %}
+
+            <div class="meal-total">
+
+                <p>Total Calories: {{ dinner.total_calories }}</p>
+
+                <p>Total Protein: {{ dinner.total_protein }} g</p>
+
+                <p>Total Fiber: {{ dinner.total_fiber }} g</p>
+
+            </div>
 
         </div>
 
     </div>
 
 </body>
+
 </html>
