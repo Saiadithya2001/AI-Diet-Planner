@@ -1,56 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-    <title>AI Diet Planner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Diet Planner Result</title>
 
     <style>
 
-        body{
-            font-family:Arial;
-            background:#f4f7fb;
+        *{
             margin:0;
             padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, sans-serif;
+            background:linear-gradient(to right,#eef2ff,#f8fafc);
+            padding:30px 15px;
+            color:#222;
         }
 
         .container{
-            width:90%;
-            max-width:500px;
-            margin:60px auto;
-            background:white;
-            padding:30px;
-            border-radius:15px;
-            box-shadow:0px 4px 15px rgba(0,0,0,0.1);
+            width:100%;
+            max-width:1100px;
+            margin:auto;
         }
 
-        h1{
+        .title{
             text-align:center;
-            color:#0f62fe;
+            font-size:42px;
+            margin-bottom:35px;
+            color:#111827;
         }
 
-        input, select{
-            width:100%;
-            padding:12px;
-            margin-top:15px;
-            border-radius:10px;
-            border:1px solid #ccc;
-            font-size:16px;
+        .card{
+            background:white;
+            padding:25px;
+            border-radius:18px;
+            margin-bottom:25px;
+            box-shadow:0 5px 18px rgba(0,0,0,0.08);
+            transition:0.3s;
         }
 
-        button{
-            width:100%;
-            padding:14px;
+        .card:hover{
+            transform:translateY(-3px);
+        }
+
+        .card h2{
+            color:#2563eb;
+            margin-bottom:20px;
+            font-size:28px;
+        }
+
+        .info-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:15px;
+        }
+
+        .info-box{
+            background:#f8fafc;
+            padding:15px;
+            border-radius:12px;
+            border-left:5px solid #2563eb;
+        }
+
+        .label{
+            font-weight:bold;
+            color:#2563eb;
+            margin-bottom:5px;
+        }
+
+        .meal-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:20px;
             margin-top:20px;
-            border:none;
-            background:#0f62fe;
-            color:white;
-            font-size:18px;
-            border-radius:10px;
-            cursor:pointer;
         }
 
-        button:hover{
-            background:#0043ce;
+        .meal{
+            background:#f8fafc;
+            padding:18px;
+            border-radius:14px;
+            border:1px solid #e5e7eb;
+        }
+
+        .meal h3{
+            color:#111827;
+            margin-bottom:15px;
+        }
+
+        .meal p{
+            margin:8px 0;
+            font-size:15px;
+        }
+
+        .meal span{
+            font-weight:bold;
+            color:#2563eb;
+        }
+
+        .summary{
+            text-align:center;
+            padding:20px;
+            background:#2563eb;
+            color:white;
+            border-radius:18px;
+            margin-bottom:30px;
+        }
+
+        .summary h2{
+            margin-bottom:10px;
+            color:white;
+        }
+
+        @media(max-width:768px){
+
+            .meal-grid{
+                grid-template-columns:1fr;
+            }
+
+            .title{
+                font-size:32px;
+            }
+
+            .card h2{
+                font-size:24px;
+            }
         }
 
     </style>
@@ -61,31 +140,202 @@
 
     <div class="container">
 
-        <h1>AI Diet Planner</h1>
+        <h1 class="title">AI Personalized Diet Plan</h1>
 
-        <form method="POST">
+        <div class="summary">
 
-            {% csrf_token %}
+            <h2>Your Daily Nutrition Target</h2>
 
-            <input type="number" name="age" placeholder="Enter Age" required>
+            <p>
+                Calories:
+                <strong>{{ calorie_target }}</strong>
+                |
+                Protein:
+                <strong>{{ protein_target }} g</strong>
+                |
+                Fiber:
+                <strong>{{ fiber_target }} g</strong>
+            </p>
 
-            <input type="number" step="0.1" name="weight" placeholder="Enter Weight (kg)" required>
+        </div>
 
-            <input type="number" step="0.1" name="height" placeholder="Enter Height (cm)" required>
+        <div class="card">
 
-            <select name="diet">
+            <h2>User Details</h2>
 
-                <option value="veg">Vegetarian</option>
+            <div class="info-grid">
 
-                <option value="nonveg">Non Vegetarian</option>
+                <div class="info-box">
+                    <div class="label">Age</div>
+                    {{ age }}
+                </div>
 
-            </select>
+                <div class="info-box">
+                    <div class="label">Weight</div>
+                    {{ weight }} kg
+                </div>
 
-            <button type="submit">Generate Diet Plan</button>
+                <div class="info-box">
+                    <div class="label">Height</div>
+                    {{ height }} cm
+                </div>
 
-        </form>
+                <div class="info-box">
+                    <div class="label">Diet Type</div>
+                    {{ diet }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Health Information</h2>
+
+            <div class="info-grid">
+
+                <div class="info-box">
+                    <div class="label">BMI</div>
+                    {{ bmi }}
+                </div>
+
+                <div class="info-box">
+                    <div class="label">Status</div>
+                    {{ status }}
+                </div>
+
+                <div class="info-box">
+                    <div class="label">Advice</div>
+                    {{ advice }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BREAKFAST -->
+
+        <div class="card">
+
+            <h2>Breakfast (25% Calories)</h2>
+
+            <div class="meal-grid">
+
+                <div class="meal">
+
+                    <h3>{{ breakfast_main.food }}</h3>
+
+                    <p><span>Quantity:</span> {{ breakfast_main.grams }} g</p>
+
+                    <p><span>Calories:</span> {{ breakfast_main.calories }}</p>
+
+                    <p><span>Protein:</span> {{ breakfast_main.protein }} g</p>
+
+                    <p><span>Fiber:</span> {{ breakfast_main.fiber }} g</p>
+
+                </div>
+
+                <div class="meal">
+
+                    <h3>{{ breakfast_side.food }}</h3>
+
+                    <p><span>Quantity:</span> {{ breakfast_side.grams }} g</p>
+
+                    <p><span>Calories:</span> {{ breakfast_side.calories }}</p>
+
+                    <p><span>Protein:</span> {{ breakfast_side.protein }} g</p>
+
+                    <p><span>Fiber:</span> {{ breakfast_side.fiber }} g</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- LUNCH -->
+
+        <div class="card">
+
+            <h2>Lunch (50% Calories)</h2>
+
+            <div class="meal-grid">
+
+                <div class="meal">
+
+                    <h3>{{ lunch_main.food }}</h3>
+
+                    <p><span>Quantity:</span> {{ lunch_main.grams }} g</p>
+
+                    <p><span>Calories:</span> {{ lunch_main.calories }}</p>
+
+                    <p><span>Protein:</span> {{ lunch_main.protein }} g</p>
+
+                    <p><span>Fiber:</span> {{ lunch_main.fiber }} g</p>
+
+                </div>
+
+                <div class="meal">
+
+                    <h3>{{ lunch_side.food }}</h3>
+
+                    <p><span>Quantity:</span> {{ lunch_side.grams }} g</p>
+
+                    <p><span>Calories:</span> {{ lunch_side.calories }}</p>
+
+                    <p><span>Protein:</span> {{ lunch_side.protein }} g</p>
+
+                    <p><span>Fiber:</span> {{ lunch_side.fiber }} g</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- DINNER -->
+
+        <div class="card">
+
+            <h2>Dinner (25% Calories)</h2>
+
+            <div class="meal-grid">
+
+                <div class="meal">
+
+                    <h3>{{ dinner_main.food }}</h3>
+
+                    <p><span>Quantity:</span> {{ dinner_main.grams }} g</p>
+
+                    <p><span>Calories:</span> {{ dinner_main.calories }}</p>
+
+                    <p><span>Protein:</span> {{ dinner_main.protein }} g</p>
+
+                    <p><span>Fiber:</span> {{ dinner_main.fiber }} g</p>
+
+                </div>
+
+                <div class="meal">
+
+                    <h3>{{ dinner_side.food }}</h3>
+
+                    <p><span>Quantity:</span> {{ dinner_side.grams }} g</p>
+
+                    <p><span>Calories:</span> {{ dinner_side.calories }}</p>
+
+                    <p><span>Protein:</span> {{ dinner_side.protein }} g</p>
+
+                    <p><span>Fiber:</span> {{ dinner_side.fiber }} g</p>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 </body>
+
 </html>
