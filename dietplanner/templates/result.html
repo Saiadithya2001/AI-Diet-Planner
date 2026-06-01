@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Diet Plan</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f7f2;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      color: #444441;
+    }
+
+    .page-wrap { width: 100%; max-width: 860px; margin: 0 auto; }
+
+    .top-bar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; color: #444441; text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: #1D9E75; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 18px; height: 18px;
+      stroke: #fff; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .back-btn {
+      font-size: 0.85rem; font-weight: 500;
+      color: #0F6E56; text-decoration: none;
+      padding: 6px 14px;
+      border: 1.5px solid #1D9E75;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: #E1F5EE; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e8e8e2;
+      padding: 1rem;
+    }
+
+    .stat-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #888780; margin-bottom: 0.3rem; }
+    .stat-value { font-size: 1.4rem; font-weight: 600; color: #444441; line-height: 1.1; }
+    .stat-unit  { font-size: 0.75rem; color: #888780; margin-top: 0.15rem; }
+
+    .bmi-normal      { border-left: 4px solid #1D9E75; }
+    .bmi-underweight { border-left: 4px solid #BA7517; }
+    .bmi-overweight  { border-left: 4px solid #E24B4A; }
+
+    .advice-banner {
+      background: #E1F5EE; border: 1px solid #9FE1CB;
+      border-radius: 12px; padding: 0.9rem 1.2rem;
+      font-size: 0.9rem; color: #085041;
+      margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .advice-banner svg { width: 18px; height: 18px; flex-shrink: 0; stroke: #1D9E75; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .targets-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.6rem; margin-bottom: 2.5rem;
+    }
+
+    .target-pill { background: #fff; border: 1px solid #e8e8e2; border-radius: 10px; padding: 0.65rem 0.75rem; text-align: center; }
+    .t-label { font-size: 0.68rem; color: #888780; font-weight: 500; }
+    .t-val   { font-size: 1rem; font-weight: 600; color: #1D9E75; margin-top: 2px; }
+    .t-unit  { font-size: 0.65rem; color: #888780; }
+
+    .meal-card { background: #fff; border-radius: 18px; border: 1px solid #e8e8e2; margin-bottom: 1.5rem; overflow: hidden; }
+
+    .meal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid #f0f0ea; }
+
+    .meal-title { display: flex; align-items: center; gap: 0.6rem; font-family: 'DM Serif Display', serif; font-size: 1.25rem; font-weight: 400; color: #444441; }
+
+    .meal-totals { display: flex; gap: 1rem; font-size: 0.8rem; }
+    .meal-totals span { color: #5F5E5A; }
+    .meal-totals strong { color: #1D9E75; }
+
+    .meal-sentence { padding: 1rem 1.5rem; font-size: 0.92rem; color: #5F5E5A; background: #fafaf7; border-bottom: 1px solid #f0f0ea; line-height: 1.6; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    thead tr { background: #f5f7f2; }
+    th { padding: 0.65rem 0.9rem; text-align: left; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; white-space: nowrap; }
+    td { padding: 0.65rem 0.9rem; color: #5F5E5A; border-top: 1px solid #f0f0ea; white-space: nowrap; }
+    tr:hover td { background: #fafaf7; }
+    td:first-child { font-weight: 500; color: #444441; }
+    tfoot tr { background: #f5f7f2; }
+    tfoot td { font-weight: 600; color: #444441; border-top: 2px solid #e0e0d8; }
+
+    .meal-desc { padding: 1.2rem 1.5rem; border-top: 1px solid #f0f0ea; }
+    .meal-desc h4 { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #1D9E75; margin-bottom: 0.6rem; }
+    .meal-desc p  { font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+
+    .footer-note { text-align: center; font-size: 0.78rem; color: #888780; margin-top: 2rem; padding-bottom: 2rem; }
+
+    @media (max-width: 600px) {
+      .meal-totals { display: none; }
+      .meal-header { padding: 1rem; }
+      .meal-sentence, .meal-desc { padding: 0.9rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="top-bar">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+      </div>
+      Diet Planner
+    </a>
+    <a href="/" class="back-btn">← New Plan</a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card {% if status == 'Underweight' %}bmi-underweight{% elif status == 'Overweight' %}bmi-overweight{% else %}bmi-normal{% endif %}">
+      <div class="stat-label">BMI</div>
+      <div class="stat-value">{{ bmi }}</div>
+      <div class="stat-unit">{{ status }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Age</div>
+      <div class="stat-value">{{ age }}</div>
+      <div class="stat-unit">years</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Weight</div>
+      <div class="stat-value">{{ weight }}</div>
+      <div class="stat-unit">kg</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Height</div>
+      <div class="stat-value">{{ height }}</div>
+      <div class="stat-unit">cm</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Diet</div>
+      <div class="stat-value" style="font-size:1rem; padding-top:4px;">
+        {% if diet == "veg" %}Vegetarian{% else %}Non-Veg{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="advice-banner">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+    {{ advice }}
+  </div>
+
+  <div class="targets-row">
+    <div class="target-pill">
+      <div class="t-label">Calories</div>
+      <div class="t-val">{{ calorie_target }}</div>
+      <div class="t-unit">kcal / day</div>
+    </div>
+    <div class="target-pill">
+      <div class="t-label">Protein</div>
+      <div class="t-val">{{ protein_target }}g</div>
+      <div class="t-unit">per day</div>
+    </div>
+    <div class="target-pill">
+      <div class="t-label">Fibre</div>
+      <div class="t-val">{{ fiber_target }}g</div>
+      <div class="t-unit">per day</div>
+    </div>
+    <div class="target-pill">
+      <div class="t-label">Vitamin C</div>
+      <div class="t-val">{{ vitamin_c_target }}mg</div>
+      <div class="t-unit">per day</div>
+    </div>
+    <div class="target-pill">
+      <div class="t-label">Calcium</div>
+      <div class="t-val">{{ calcium_target }}mg</div>
+      <div class="t-unit">per day</div>
+    </div>
+    <div class="target-pill">
+      <div class="t-label">Vitamin B</div>
+      <div class="t-val">{{ vitamin_b_target }}mg</div>
+      <div class="t-unit">per day</div>
+    </div>
+    <div class="target-pill">
+      <div class="t-label">Probiotics</div>
+      <div class="t-val">{{ probiotics_target }}</div>
+      <div class="t-unit">servings</div>
+    </div>
+  </div>
+
+  <!-- BREAKFAST -->
+  <div class="meal-card">
+    <div class="meal-header">
+      <div class="meal-title">🌅 Breakfast</div>
+      <div class="meal-totals">
+        <span><strong>{{ breakfast.total_calories }}</strong> kcal</span>
+        <span><strong>{{ breakfast.total_protein }}g</strong> protein</span>
+        <span><strong>{{ breakfast.total_fiber }}g</strong> fibre</span>
+      </div>
+    </div>
+    <div class="meal-sentence">{{ breakfast_sentence }}</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Food</th><th>Grams</th><th>Calories</th><th>Protein (g)</th>
+            <th>Fibre (g)</th><th>Carbs (g)</th><th>Fat (g)</th>
+            <th>Vit C (mg)</th><th>Calcium (mg)</th><th>Vit B (mg)</th><th>Probiotics</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in breakfast.items %}
+          <tr>
+            <td>{{ item.food }}</td><td>{{ item.grams }}</td><td>{{ item.calories }}</td>
+            <td>{{ item.protein }}</td><td>{{ item.fiber }}</td><td>{{ item.carbs }}</td>
+            <td>{{ item.fat }}</td><td>{{ item.vitamin_c }}</td><td>{{ item.calcium }}</td>
+            <td>{{ item.vitamin_b }}</td><td>{{ item.probiotics }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td><td>—</td>
+            <td>{{ breakfast.total_calories }}</td><td>{{ breakfast.total_protein }}</td>
+            <td>{{ breakfast.total_fiber }}</td><td>{{ breakfast.total_carbs }}</td>
+            <td>{{ breakfast.total_fat }}</td><td>{{ breakfast.total_vitamin_c }}</td>
+            <td>{{ breakfast.total_calcium }}</td><td>{{ breakfast.total_vitamin_b }}</td>
+            <td>{{ breakfast.total_probiotics }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- LUNCH -->
+  <div class="meal-card">
+    <div class="meal-header">
+      <div class="meal-title">☀️ Lunch</div>
+      <div class="meal-totals">
+        <span><strong>{{ lunch.total_calories }}</strong> kcal</span>
+        <span><strong>{{ lunch.total_protein }}g</strong> protein</span>
+        <span><strong>{{ lunch.total_fiber }}g</strong> fibre</span>
+      </div>
+    </div>
+    <div class="meal-sentence">{{ lunch_sentence }}</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Food</th><th>Grams</th><th>Calories</th><th>Protein (g)</th>
+            <th>Fibre (g)</th><th>Carbs (g)</th><th>Fat (g)</th>
+            <th>Vit C (mg)</th><th>Calcium (mg)</th><th>Vit B (mg)</th><th>Probiotics</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in lunch.items %}
+          <tr>
+            <td>{{ item.food }}</td><td>{{ item.grams }}</td><td>{{ item.calories }}</td>
+            <td>{{ item.protein }}</td><td>{{ item.fiber }}</td><td>{{ item.carbs }}</td>
+            <td>{{ item.fat }}</td><td>{{ item.vitamin_c }}</td><td>{{ item.calcium }}</td>
+            <td>{{ item.vitamin_b }}</td><td>{{ item.probiotics }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td><td>—</td>
+            <td>{{ lunch.total_calories }}</td><td>{{ lunch.total_protein }}</td>
+            <td>{{ lunch.total_fiber }}</td><td>{{ lunch.total_carbs }}</td>
+            <td>{{ lunch.total_fat }}</td><td>{{ lunch.total_vitamin_c }}</td>
+            <td>{{ lunch.total_calcium }}</td><td>{{ lunch.total_vitamin_b }}</td>
+            <td>{{ lunch.total_probiotics }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="meal-desc">
+      <h4>About This Meal</h4>
+      <p>{{ lunch_description }}</p>
+    </div>
+  </div>
+
+  <!-- DINNER -->
+  <div class="meal-card">
+    <div class="meal-header">
+      <div class="meal-title">🌙 Dinner</div>
+      <div class="meal-totals">
+        <span><strong>{{ dinner.total_calories }}</strong> kcal</span>
+        <span><strong>{{ dinner.total_protein }}g</strong> protein</span>
+        <span><strong>{{ dinner.total_fiber }}g</strong> fibre</span>
+      </div>
+    </div>
+    <div class="meal-sentence">{{ dinner_sentence }}</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Food</th><th>Grams</th><th>Calories</th><th>Protein (g)</th>
+            <th>Fibre (g)</th><th>Carbs (g)</th><th>Fat (g)</th>
+            <th>Vit C (mg)</th><th>Calcium (mg)</th><th>Vit B (mg)</th><th>Probiotics</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in dinner.items %}
+          <tr>
+            <td>{{ item.food }}</td><td>{{ item.grams }}</td><td>{{ item.calories }}</td>
+            <td>{{ item.protein }}</td><td>{{ item.fiber }}</td><td>{{ item.carbs }}</td>
+            <td>{{ item.fat }}</td><td>{{ item.vitamin_c }}</td><td>{{ item.calcium }}</td>
+            <td>{{ item.vitamin_b }}</td><td>{{ item.probiotics }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td><td>—</td>
+            <td>{{ dinner.total_calories }}</td><td>{{ dinner.total_protein }}</td>
+            <td>{{ dinner.total_fiber }}</td><td>{{ dinner.total_carbs }}</td>
+            <td>{{ dinner.total_fat }}</td><td>{{ dinner.total_vitamin_c }}</td>
+            <td>{{ dinner.total_calcium }}</td><td>{{ dinner.total_vitamin_b }}</td>
+            <td>{{ dinner.total_probiotics }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="meal-desc">
+      <h4>About This Meal</h4>
+      <p>{{ dinner_description }}</p>
+    </div>
+  </div>
+
+  <p class="footer-note">Results are for general guidance only. Consult a nutritionist for medical advice.</p>
+
+</div>
+</body>
+</html>
